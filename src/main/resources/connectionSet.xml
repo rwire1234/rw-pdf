@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><connectionSet xmlns="http://www.xfa.org/schema/xfa-connection-set/2.1/">
+    <xsdConnection dataDescription="us-ids" name="DataConnection">
+        <uri>C:\EFSWEB\samula_view\EFSWEB_VOB\server\EFSFormsWeb\WebContent\forms\US_IDS_for_form.xsd</uri>
+        <rootElement>us-ids</rootElement>
+    </xsdConnection>
+    <?originalXFAVersion http://www.xfa.org/schema/xfa-connection-set/2.1/?>
+</connectionSet>

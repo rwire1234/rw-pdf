@@ -1,0 +1,914 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="XFASchemaXSD5">
+       
+    <xsd:annotation>
+              
+        <xsd:documentation>
+			*********************************************************************************
+			* US-IDS v20 2005 September
+			*************************************************************************************
+			* Contacts: * USPTO: Jenna Davis; jenna.davis@ustpo.gov *
+			USPTO: Julie Fraser; julie.fraser@uspto.gov * USPTO: William
+			Stryjewski; william.stryjewski@uspto.gov
+			*************************************************************************************
+			* Information Disclosure Statement for Electronic Filing
+			System * Notes: * 1. This dtd is to capture form information
+			and feed a text string into the USPTO search system. * 2. A
+			dtd for Information Disclosure Statements filed under 37 CFR
+			1.97 and 1.98 . ****************************************** *
+			Revision History
+			*************************************************************************************
+			* 11/10/2005 * The Schema is changed for IDS form purposes.
+			All the validation are done using us-ids DTD * of EAI_HUB
+			application. EFSWEB will do the XML transformation during
+			run time to make the * XML generated from the IDS form to
+			comply with the us-ids DTD. * 09/01/2005 (v18 to v20_EFSWeb
+			[note v19 produced Aug 2003 but never deployed]) * NOTE:
+			this DTD/Schema is particular to the EFSWeb IDS form. For
+			data validations * and other purposes, use the IDS v20
+			DTD/Schema * *++++ changes from v20 to v20_EFSWeb (form
+			version) ++++ * * Removed all ST.36 name_group elements,
+			leaving only &lt;name&gt; (will validate against ST.36
+			model) * Changed content of &lt;us-nplcit&gt; to
+			&lt;!ELEMENT us-nplcit (text) &gt; * *++++ changes from v18
+			to v20 ++++ * * Made &lt;confirmation-number&gt; optional
+			within &lt;us-filing-info&gt; * Made &lt;invention-title&gt;
+			optional within &lt;us-filing-info&gt; * Changed content
+			model of &lt;us-first-named-inventor&gt; from * (prefix?,
+			first-name?, middle-name?,last-name, suffix?) * to ST.36 *
+			((name | (prefix? , (last-name | orgname) , first-name? ,
+			middle-name? , suffix? , iid? , * role? , orgname? ,
+			department? , synonym*)) , registered-number?) * Changed
+			us-examiner model from &lt;!ELEMENT us-examiner
+			(#PCDATA)&gt; * to ST.36 * &lt;!ELEMENT primary-examiner
+			(((name | (prefix?,(last-name | orgname),first-name?, *
+			middle-name?,suffix?,iid?,role?,orgname?,department?,synonym*)),
+			* registered-number?),electronic-signature?) &gt; * to
+			support &lt;name&gt; and &lt;electronic signature&gt; *
+			Changed content of &lt;us-ids-certification&gt; from *
+			&lt;!ELEMENT us-ids-certification
+			(us-foreign-pat-office-citation | us-new-findings)&gt; * to
+			* &lt;!ELEMENT us-ids-certification
+			((us-foreign-pat-office-citation | us-new-findings), *
+			certification-statement-attached?,fee-submitted?,((applicant-name,
+			* electronic-signature) |
+			(agent-name,electronic-signature))?) &gt; * Added element
+			&lt;relevant-portion&gt; to &lt;us-doc-reference&gt; *
+			Changed 'id' and 'num' attributes from #REQUIRED to #IMPLIED
+			on &lt;us-doc-reference&gt; * Added #IMPLIED attribute
+			'sequence' to &lt;us-doc-reference&gt; * Created element
+			&lt;us-foreign-document-cite&gt; with #IMPLIED attributes *
+			'id', 'num', 'sequence' (CDATA) and 'translation-attached
+			(yes | no) * Added element &lt;us-nplcit&gt; (ST.36
+			&lt;nplcit&gt; model with addition of 'sequence' attribute)
+			* Changed attribute name 'type' to 'name-type' within
+			&lt;name&gt; element (ST.36) * Added elements applicant-name
+			and agent-name with content * ((name |
+			(prefix?,last-name,first-name?,middle-name?,
+			suffix?)),registered-number?) * Added
+			&lt;electronic-signature&gt; to allow for examiner,
+			applicant, or agent's signatures
+			*************************************************************************************
+			* * 03/06/2003 (v17 to v18) * Removed definition of element
+			&lt;br&gt;. * Removed element &lt;br&gt; from elements
+			&lt;b&gt;, &lt;i&gt;, and &lt;smallcaps&gt;. *
+			****************************************************************************
+			* * 11/07/02 (v16 to v 17) * Text in the
+			"us-ids-certification", "us-foreign-pat-office-citation" and
+			"us-new-findings"
+			*************************************************************************************
+			* * 09/11/02 (v15 to v16) * root attributes of date-produce
+			and dtd-version have been changed to fixed CData value *
+			Delete attribute " Label" and "class" from the element
+			"middle-name" * Renamed the root name to "us-ids"
+			*************************************************************************************
+			* *08/29/02 (v14 to v15) * removed relevant * changed
+			certification to us-ids-certification * changed
+			foreign-pat-office-citation to us-
+			foreign-pat-office-citation * changed new-findings to
+			us-new-findings * changed ids-remarks to us-ids-remarks * In
+			us-first-named-inventor; removed us-name and added prefix,
+			first-name, middle-name, last-name and * suffix to
+			us-first-named-inventor
+			*************************************************************************************
+			* * 08/07/02 (v13 to v14) * lang attribute has been changed
+			from implied to req * file has been changed from required to
+			implied
+			*************************************************************************************
+			* * 08/06/02 * inserted attribute"date-produced" into the
+			root element
+			*************************************************************************************
+			* * 08/01/02 (v12 to v13) * removed attributes on
+			us-filing-info * removed confirmation-number (duplicate)
+			from us-filing-info * change certification content model to
+			include certification language * changed root attributes *
+			removed examiner-considered and us-examiner-e-sign content
+			model
+			*************************************************************************************
+			* * 07/31/02 (v11 to v12) * Updated us-filing info to epct
+			standards (changed first-named-applicant to
+			us-first-named-inventor; * application-sub to
+			us-application-identificaiton-info
+			*************************************************************************************
+			* * Date: 2/2002 * Version: 1.0 * Author: William Stryjewski
+			* Description: * 1. Reconciled the ePCT elements with
+			current EFS implementation.
+			*************************************************************************************
+			* * us-ids * Attributes: * lang = language of application -
+			use ISO639 language code * dtd-version = dtd version number
+			* date-produced = YYYYMMDD Creation date of this DTD e.g,
+			20011230 if desired, 12 characters maximum * file = filename
+			of the whole application * status = status of the
+			application;
+			***********************************************************************************
+			A dtd for Information Disclosure Statements filed under 37
+			CFR 1.97 and 1.98 . This dtd does not address the PCT filing
+			info data model, but handles the production trans.dtd in
+			Epave 3.0.15 and 3.1. Thus, for adaptation of the epct.dtd
+			this data model must change.
+		</xsd:documentation>
+           
+    </xsd:annotation>
+       
+    <xsd:element name="us-ids">
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="us-filing-info"/>
+                            
+                <xsd:element minOccurs="0" ref="us-ids-certification"/>
+                            
+                <xsd:element minOccurs="0" ref="us-patent-cite"/>
+                            
+                <xsd:element minOccurs="0" ref="us-pub-appl-cite"/>
+                            
+                <xsd:element minOccurs="0" ref="us-foreign-document-cite"/>
+                            
+                <xsd:element maxOccurs="unbounded" minOccurs="0" ref="us-nplcit"/>
+                            
+                <xsd:element minOccurs="0" ref="us-ids-remarks"/>
+                            
+                <xsd:element name="version-info" type="xsd:string"/>
+                            
+                <xsd:element name="clientversion" type="xsd:string"/>
+                            
+                <xsd:element name="numofpages" type="xsd:string"/>
+                         
+            </xsd:sequence>
+                     
+            <xsd:attribute name="lang" type="xsd:string" use="required"/>
+                     
+            <xsd:attribute fixed="v20_EFSWeb" name="dtd-version" type="xsd:string"/>
+                     
+            <xsd:attribute fixed="20050902" name="date-produced" type="xsd:string"/>
+                     
+            <xsd:attribute name="file" type="xsd:string"/>
+                     
+            <xsd:attribute name="status" type="xsd:string"/>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-filing-info">
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element minOccurs="0" ref="us-application-identification-info"/>
+                            
+                <xsd:element ref="us-first-named-inventor"/>
+                            
+                <xsd:element minOccurs="0" ref="invention-title"/>
+                            
+                <xsd:element minOccurs="0" ref="file-reference-id"/>
+                            
+                <xsd:element minOccurs="0" ref="us-group-art-unit"/>
+                            
+                <xsd:element minOccurs="0" ref="primary-examiner"/>
+                         
+            </xsd:sequence>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-application-identification-info">
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="doc-number"/>
+                            
+                <xsd:element minOccurs="0" ref="confirmation-number"/>
+                            
+                <xsd:element ref="date"/>
+                         
+            </xsd:sequence>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="doc-number">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				***** Document number ***** In case of application ;
+				application number In case of publication ; publication
+				number In case of grant patent; patent number
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:simpleType>
+                     
+            <xsd:restriction base="xsd:string">
+                            
+                <xsd:maxLength value="11"/>
+                         
+            </xsd:restriction>
+                  
+        </xsd:simpleType>
+           
+    </xsd:element>
+       
+    <xsd:element name="confirmation-number" type="xsd:string">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				confirmation number from office
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+           
+    </xsd:element>
+       
+    <xsd:element name="date">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				***** date, YYYYMMDD, e.g, 20011230 *****
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:simpleType>
+                     
+            <xsd:restriction base="xsd:nonNegativeInteger">
+                            
+                <xsd:totalDigits value="8"/>
+                         
+            </xsd:restriction>
+                  
+        </xsd:simpleType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-first-named-inventor">
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="name"/>
+                         
+            </xsd:sequence>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="name">
+              
+        <xsd:complexType>
+                     
+            <xsd:simpleContent>
+                            
+                <xsd:extension base="xsd:string">
+                                   
+                    <xsd:attribute name="name-type" use="required">
+                                          
+                        <xsd:simpleType>
+                                                 
+                            <xsd:restriction base="xsd:NMTOKEN">
+                                                        
+                                <xsd:enumeration value="legal"/>
+                                                        
+                                <xsd:enumeration value="natural"/>
+                                                     
+                            </xsd:restriction>
+                                              
+                        </xsd:simpleType>
+                                       
+                    </xsd:attribute>
+                                
+                </xsd:extension>
+                         
+            </xsd:simpleContent>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="invention-title">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				Title of the Invention: preferably two to seven words
+				when in English or translated into English and precise.
+				(Rule 4.3)
+
+				Recommended id = 'invt'
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:complexType>
+                     
+            <xsd:simpleContent>
+                            
+                <xsd:extension base="xsd:string">
+                                   
+                    <xsd:attribute name="id" type="xsd:ID"/>
+                                   
+                    <xsd:attribute name="lang" type="xsd:string"/>
+                                
+                </xsd:extension>
+                         
+            </xsd:simpleContent>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="file-reference-id">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				applicant's or agent's file reference, if desired, 12
+				characters maximum
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:simpleType>
+                     
+            <xsd:restriction base="xsd:string">
+                            
+                <xsd:maxLength value="25"/>
+                         
+            </xsd:restriction>
+                  
+        </xsd:simpleType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-group-art-unit">
+              
+        <xsd:simpleType>
+                     
+            <xsd:restriction base="xsd:string">
+                            
+                <xsd:maxLength value="6"/>
+                         
+            </xsd:restriction>
+                  
+        </xsd:simpleType>
+           
+    </xsd:element>
+       
+    <xsd:element name="primary-examiner">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>ST.32 name: B746</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="name"/>
+                            
+                <xsd:element minOccurs="0" ref="electronic-signature"/>
+                         
+            </xsd:sequence>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="electronic-signature">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				A signature represented by electronic means.
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="basic-signature"/>
+                         
+            </xsd:sequence>
+                     
+            <xsd:attribute name="date" type="xsd:string" use="required"/>
+                     
+            <xsd:attribute name="place-signed" type="xsd:string"/>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="basic-signature">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				a non-PKI electronic signature
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="text-string"/>
+                         
+            </xsd:sequence>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="text-string" type="xsd:string">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+                				a simple text string is to be used as the basic
+				electronic signature, e.g., John Doe
+				
+                <text-string>/jd/</text-string>
+                         
+            </xsd:documentation>
+                  
+        </xsd:annotation>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-ids-certification">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				These are the certifications statements for IDS under
+				1.97(e).
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="us-foreign-pat-office-citation"/>
+                            
+                <xsd:element ref="us-new-findings"/>
+                            
+                <xsd:element minOccurs="0" ref="us-certification-statement-attached"/>
+                            
+                <xsd:element minOccurs="0" ref="us-fee-submitted"/>
+                            
+                <xsd:element ref="applicant-name"/>
+                            
+                <xsd:element minOccurs="0" ref="electronic-signature"/>
+                         
+            </xsd:sequence>
+                     
+            <xsd:attribute fixed="This Information Disclosure Statement was submitted under the following conditions, which satisfies the requirement under 37 CFR 1.97(e)" name="text" type="xsd:string"/>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-foreign-pat-office-citation">
+              
+        <!--This is the certification statement under 37 CFR 1.97 (e) (1). The tag will call boiler plate language in an xsl stylesheet.-->
+              
+        <xsd:complexType>
+                     
+            <xsd:attribute fixed="That each item of information contained in the information disclosure statement was first cited in any communication from a foreign patent office in a counterpart foreign application not more than three months prior to the filing of the information disclosure statement." name="text" type="xsd:string"/>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-new-findings">
+              
+        <!--This is the certification statement under 37 CFR 1.97 (e) (2). The tag will call boiler plate language in an xsl stylesheet.-->
+              
+        <xsd:complexType>
+                     
+            <xsd:attribute fixed="That no item of information contained in the information disclosure statement was cited in a communication from a foreign patent office in a counterpart foreign application, and, to the knowledge of the person signing the certification after making reasonable inquiry, no item of information contained in the information disclosure statement was known to any individual designated in 37 CFR 1.56(c) more than three months prior to the filing of the information disclosure statement." name="text" type="xsd:string"/>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-certification-statement-attached">
+              
+        <xsd:complexType>
+                     
+            <xsd:attribute name="file" type="xsd:string" use="required"/>
+                     
+            <xsd:attribute name="type" use="required">
+                            
+                <xsd:simpleType>
+                                   
+                    <xsd:restriction base="xsd:NMTOKEN">
+                                          
+                        <xsd:enumeration value="jpg"/>
+                                          
+                        <xsd:enumeration value="tiff"/>
+                                          
+                        <xsd:enumeration value="jfif"/>
+                                          
+                        <xsd:enumeration value="pdf"/>
+                                          
+                        <xsd:enumeration value="jpeg"/>
+                                          
+                        <xsd:enumeration value="tif"/>
+                                       
+                    </xsd:restriction>
+                                
+                </xsd:simpleType>
+                         
+            </xsd:attribute>
+                     
+            <xsd:attribute fixed="See attached certification statement." name="boilerplate-text" type="xsd:string"/>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-fee-submitted">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				Fee set forth in 37 CFR 1.17 (p) has been submitted
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:complexType>
+                     
+            <xsd:attribute fixed="Fee set forth in 37 CFR 1.17 (p) has been submitted herewith" name="boilerplate-text" type="xsd:string"/>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="applicant-name">
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="name"/>
+                            
+                <xsd:element minOccurs="0" ref="registered-number"/>
+                         
+            </xsd:sequence>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="registered-number" type="xsd:string">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>registered number</xsd:documentation>
+                  
+        </xsd:annotation>
+           
+    </xsd:element>
+       
+    <xsd:element name="agent-name">
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="name"/>
+                            
+                <xsd:element minOccurs="0" ref="registered-number"/>
+                         
+            </xsd:sequence>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-patent-cite">
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element maxOccurs="50" ref="us-doc-reference"/>
+                         
+            </xsd:sequence>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-doc-reference">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				***** application reference information : application
+				number, ***** country
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="doc-number"/>
+                            
+                <xsd:element ref="name"/>
+                            
+                <xsd:element minOccurs="0" ref="kind"/>
+                            
+                <xsd:element ref="date"/>
+                            
+                <xsd:sequence minOccurs="0">
+                                   
+                    <xsd:element ref="class"/>
+                                   
+                    <xsd:element ref="subclass"/>
+                                
+                </xsd:sequence>
+                            
+                <xsd:element minOccurs="0" ref="relevant-portion"/>
+                         
+            </xsd:sequence>
+                     
+            <xsd:attribute name="id" type="xsd:ID"/>
+                     
+            <xsd:attribute name="num" type="xsd:string"/>
+                     
+            <xsd:attribute name="sequence" type="xsd:string"/>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="kind">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				***** kind code, *****
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:simpleType>
+                     
+            <xsd:restriction base="xsd:string">
+                            
+                <xsd:maxLength value="2"/>
+                         
+            </xsd:restriction>
+                  
+        </xsd:simpleType>
+           
+    </xsd:element>
+       
+    <xsd:element name="class">
+              
+        <xsd:simpleType>
+                     
+            <xsd:restriction base="xsd:string">
+                            
+                <xsd:maxLength value="8"/>
+                         
+            </xsd:restriction>
+                  
+        </xsd:simpleType>
+           
+    </xsd:element>
+       
+    <xsd:element name="subclass">
+              
+        <xsd:simpleType>
+                     
+            <xsd:restriction base="xsd:string">
+                            
+                <xsd:maxLength value="9"/>
+                         
+            </xsd:restriction>
+                  
+        </xsd:simpleType>
+           
+    </xsd:element>
+       
+    <xsd:element name="relevant-portion" type="xsd:string"/>
+       
+    <xsd:element name="us-pub-appl-cite">
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element maxOccurs="50" ref="us-doc-reference"/>
+                         
+            </xsd:sequence>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-foreign-document-cite">
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element maxOccurs="50" ref="us-foreign-doc-reference"/>
+                         
+            </xsd:sequence>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-foreign-doc-reference">
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="country"/>
+                            
+                <xsd:element name="doc-number">
+                                   
+                    <xsd:simpleType>
+                                          
+                        <xsd:restriction base="xsd:string">
+                                                 
+                            <xsd:maxLength value="17"/>
+                                              
+                        </xsd:restriction>
+                                       
+                    </xsd:simpleType>
+                                
+                </xsd:element>
+                            
+                <xsd:element minOccurs="0" ref="kind"/>
+                            
+                <xsd:element ref="name"/>
+                            
+                <xsd:element ref="date"/>
+                            
+                <xsd:sequence minOccurs="0">
+                                   
+                    <xsd:element ref="class"/>
+                                   
+                    <xsd:element ref="subclass"/>
+                                
+                </xsd:sequence>
+                            
+                <xsd:element minOccurs="0" ref="relevant-portion"/>
+                         
+            </xsd:sequence>
+                     
+            <xsd:attribute name="translation-attached" use="required">
+                            
+                <xsd:simpleType>
+                                   
+                    <xsd:restriction base="xsd:NMTOKEN">
+                                          
+                        <xsd:enumeration value="yes"/>
+                                          
+                        <xsd:enumeration value="no"/>
+                                       
+                    </xsd:restriction>
+                                
+                </xsd:simpleType>
+                         
+            </xsd:attribute>
+                     
+            <xsd:attribute name="id" type="xsd:string"/>
+                     
+            <xsd:attribute name="num" type="xsd:string"/>
+                     
+            <xsd:attribute name="sequence" type="xsd:string"/>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="country" type="xsd:string">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				Country: use ST.3 country code, e.g. DE, FR, GB, NL,
+				etc. Also includes EP, WO, etc.
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+           
+    </xsd:element>
+       
+    <xsd:element name="us-nplcit">
+              
+        <xsd:annotation>
+                     
+            <xsd:documentation>
+				* Non-Patent Literature (NPL) CITation; Notes:; This can
+				be free text data without any structure (#PCDATA) which
+				is NOT recommended or it can be highly structured data
+				which is marked up according to ST.14 and ISO 690 layout
+				; This part of the DTD has used many different sources
+				for element names and DTD structure and reference: AACR2
+				/ MARC ISO 12083 - Electronic manuscript prep. and
+				markup. DTD Association of American Publishers (AAP)
+				Z39.59 DTD European Working Group for SGML (EWS) MAJOUR
+				DTD SuperJournal Full Article DTD
+				www.superjournal.ac.uk/sj Elsevier DTD Medline DTD (NLM)
+			</xsd:documentation>
+                  
+        </xsd:annotation>
+              
+        <xsd:complexType>
+                     
+            <xsd:sequence>
+                            
+                <xsd:element ref="text"/>
+                         
+            </xsd:sequence>
+                     
+            <xsd:attribute name="id" type="xsd:ID"/>
+                     
+            <xsd:attribute name="num" type="xsd:string"/>
+                     
+            <xsd:attribute name="type" type="xsd:string"/>
+                     
+            <xsd:attribute name="medium" type="xsd:string"/>
+                     
+            <xsd:attribute name="file" type="xsd:string"/>
+                     
+            <xsd:attribute name="url" type="xsd:string"/>
+                     
+            <xsd:attribute name="sequence" type="xsd:string"/>
+                     
+            <xsd:attribute name="translation-attached">
+                            
+                <xsd:simpleType>
+                                   
+                    <xsd:restriction base="xsd:NMTOKEN">
+                                          
+                        <xsd:enumeration value="yes"/>
+                                          
+                        <xsd:enumeration value="no"/>
+                                       
+                    </xsd:restriction>
+                                
+                </xsd:simpleType>
+                         
+            </xsd:attribute>
+                  
+        </xsd:complexType>
+           
+    </xsd:element>
+       
+    <xsd:element name="text" type="xsd:string"/>
+       
+    <xsd:element name="us-ids-remarks" type="xsd:string"/>
+    
+</xsd:schema>

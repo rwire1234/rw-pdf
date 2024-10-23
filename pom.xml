@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.pdf</groupId>
+	<artifactId>pdf-generator</artifactId>
+	<version>9.0.1-SNAPSHOT</version>
+	<name>PDF Generator</name>
+	<description>PDF Generator Spring Boot Application</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+		<itext.licensekey.version>4.1.4</itext.licensekey.version>
+		<itext.pdfxfa.version>4.0.4</itext.pdfxfa.version>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf.licensing</groupId>
+			<artifactId>licensing-base</artifactId>
+			<version>${itext.licensekey.version}</version>
+		  </dependency>
+		  <dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>pdfxfa</artifactId>
+			<version>${itext.pdfxfa.version}</version>
+		  </dependency>
+		  <dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>forms</artifactId>
+			<version>${project.version}</version>
+		  </dependency>
+		  <dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>kernel</artifactId>
+			<version>${project.version}</version>
+		  </dependency>
+		  <dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>commons</artifactId>
+			<version>${project.version}</version>
+		  </dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+		  <releases>
+			<enabled>false</enabled>
+		  </releases>
+		  <snapshots>
+			<enabled>true</enabled>
+		  </snapshots>
+		  <id>itext-snapshot</id>
+		  <name>iText Repository - snapshots</name>
+		  <url>https://repo.itextsupport.com/snapshot</url>
+		</repository>
+		<repository>
+		  <releases>
+			<enabled>true</enabled>
+		  </releases>
+		  <snapshots>
+			<enabled>false</enabled>
+		  </snapshots>
+		  <id>itext-releases</id>
+		  <name>iText Repository - releases</name>
+		  <url>https://repo.itextsupport.com/releases</url>
+		</repository>
+		<repository>
+		  <releases>
+			<enabled>false</enabled>
+		  </releases>
+		  <snapshots>
+			<enabled>true</enabled>
+		  </snapshots>
+		  <id>apache.snapshots</id>
+		  <name>Apache Development Snapshot Repository</name>
+		  <url>https://repository.apache.org/content/repositories/snapshots/</url>
+		</repository>
+	  </repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

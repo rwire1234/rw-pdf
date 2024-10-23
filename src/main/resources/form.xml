@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><form xmlns="http://www.xfa.org/schema/xfa-form/2.8/">
+    <subform name="us-ids">
+        <instanceManager name="_sfpatitemflow">
+            <occur/>
+        </instanceManager>
+        <subform name="sfpatitemflow">
+            <instanceManager name="_patItemsf">
+                <occur/>
+            </instanceManager>
+            <subform name="patItemsf">
+                <field name="citenotxt">
+                    <event>
+                        <script/>
+                    </event>
+                    <ui>
+                        <textEdit>
+                            <margin/>
+                            <border/>
+                        </textEdit>
+                    </ui>
+                    <font/>
+                    <para/>
+                </field>
+            </subform>
+        </subform>
+        <instanceManager name="_sfpubitemflow">
+            <occur/>
+        </instanceManager>
+        <subform name="sfpubitemflow">
+            <instanceManager name="_pubitemsf"/>
+            <subform name="pubitemsf">
+                <field name="citeTxt">
+                    <event>
+                        <script/>
+                    </event>
+                    <ui>
+                        <textEdit>
+                            <margin/>
+                            <border/>
+                        </textEdit>
+                    </ui>
+                    <font/>
+                    <para/>
+                </field>
+            </subform>
+        </subform>
+        <instanceManager name="_sffrnitemflow">
+            <occur/>
+        </instanceManager>
+        <subform name="sffrnitemflow">
+            <instanceManager name="_frnitem"/>
+            <subform name="frnitem">
+                <field name="citeTxt">
+                    <event>
+                        <script/>
+                    </event>
+                    <ui>
+                        <textEdit>
+                            <margin/>
+                            <border/>
+                        </textEdit>
+                    </ui>
+                    <font/>
+                    <para/>
+                </field>
+            </subform>
+        </subform>
+        <instanceManager name="_sfnplitemflow">
+            <occur/>
+        </instanceManager>
+        <subform name="sfnplitemflow">
+            <instanceManager name="_sfnplitem"/>
+            <subform name="sfnplitem">
+                <field name="citeTxt">
+                    <event>
+                        <script/>
+                    </event>
+                    <ui>
+                        <textEdit>
+                            <margin/>
+                            <border/>
+                        </textEdit>
+                    </ui>
+                    <font/>
+                    <para/>
+                </field>
+            </subform>
+        </subform>
+        <pageSet>
+            <pageArea name="IDSMaster"/>
+            <pageArea name="Page1"/>
+            <pageArea name="Page1"/>
+            <pageArea name="Page2"/>
+        </pageSet>
+    </subform>
+</form>

@@ -1,0 +1,44 @@
+<us-ids date-produced="20050902" dtd-version="v20_EFSWeb" file="" lang="" status="">
+    <us-filing-info>
+        <us-application-identification-info>
+            <doc-number>18315989</doc-number>
+            <date>2024-10-15</date>
+        </us-application-identification-info>
+        <file-reference-id>ML-303</file-reference-id>
+        <us-first-named-inventor>
+            <name name-type="">MAGIC LEAP INC [US]</name>
+        </us-first-named-inventor>
+    </us-filing-info>
+    <us-pub-appl-cite>
+        <us-doc-reference id="dd:id_3" num="1" sequence="">
+            <doc-number>US201805328</doc-number>
+            <name name-type="">N.A</name>
+            <date>2018-02-22</date>
+            <kind>A1</kind>
+        </us-doc-reference>
+        <us-doc-reference id="dd:id_3" num="2" sequence="">
+            <doc-number>US200812528</doc-number>
+            <name name-type="">CASE CHARLES WHIPPLE [US]</name>
+            <date>2008-05-29</date>
+            <kind>A1</kind>
+        </us-doc-reference>
+    </us-pub-appl-cite>
+    <us-foreign-document-cite>
+        <us-foreign-doc-reference id="1" num="" sequence="">
+            <country>WO</country>
+            <doc-number>WO201924605</doc-number>
+            <name name-type="">N.A</name>
+            <date>2019-12-26</date>
+            <kind>A1</kind>
+        </us-foreign-doc-reference>
+    </us-foreign-document-cite>
+    <us-nplcit file="" id="1" medium="" num="" sequence="" translation-attached="no" type="" url="">
+        <text>- International Preliminary Report on Patentability for PCT Application No.
+            PCT/US2019/037676</text>
+    </us-nplcit>
+    <us-nplcit file="" id="2" medium="" num="" sequence="" translation-attached="no" type="" url="">
+        <text>
+            - ARToolKit:
+            https://web.archive.org/web/20051013062315/http://www.hitl.washington.edu:80/artoolkit/documentation/hardware.htm</text>
+    </us-nplcit>
+</us-ids>
