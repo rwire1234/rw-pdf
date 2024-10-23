@@ -62,8 +62,6 @@ public class HomeController {
 				Element rootElement = domDoc.getDocumentElement();
 				if (rootElement != null) {
 					System.out.println("Root Element Name: " + rootElement.getNodeName());
-					// System.out.println("Root Element Value: " + rootElement.getTextContent());
-
 					if (rootElement.hasAttributes()) {
 						System.out.println("Root Element Attr:");
 						for (int i = 0; i < rootElement.getAttributes().getLength(); i++) {
@@ -82,8 +80,6 @@ public class HomeController {
 							childName = childName.replace(':', '_');
 							String output = destPath + "/" + childName + ".xml";
 							try (FileOutputStream fileOutputStream = new FileOutputStream(output)) {
-								// byte[] bytes = childElement.getTextContent().getBytes();
-								// fileOutputStream.write(bytes);
 								Transformer transformer = TransformerFactory.newInstance().newTransformer();
 								transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 								transformer.setOutputProperty(OutputKeys.INDENT, "yes");
