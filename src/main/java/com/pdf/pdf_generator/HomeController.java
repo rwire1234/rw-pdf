@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,8 +21,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -36,7 +35,7 @@ import org.w3c.dom.NodeList;
 @RestController
 public class HomeController {
 	public static final String RESOURCE = "src/main/resources/IDS_June2024.pdf";
-	public static final String RESULT = "src/main/resources/Generated_IDS.pdf";
+	public static String RESULT = "src/main/resources/";
 	public static final String DESTINATION = "src/main/resources/";
 	public static final String XML_DATA = "src/main/resources/dataToFill.xml";
 	private static final String UPLOAD_DIR = "src/main/resources/";
@@ -107,28 +106,30 @@ public class HomeController {
 		pdfDoc.close();
 	}
 
-	@PostMapping("/api/v2/upload-xml")
-	public ResponseEntity<String> uploadXml(@RequestBody String xmlContent) {
+	@PostMapping("/api/v2/upload-xml/{id}/{number}")
+	public ResponseEntity<String> uploadXml(@PathVariable int id, @PathVariable String number,
+			@RequestBody String xmlContent) {
 		try {
 			Path uploadPath = Paths.get(UPLOAD_DIR);
-
-			// Create a unique filename based on the current date and time
-			String timestamp = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now());
-			String fileName = "uploaded_file_" + timestamp + ".xml";
-			XML_FILE += "uploaded_file_" + timestamp + ".xml";
+			String fileName = "uploaded_file_" + id + "-" + number + ".xml";
+			XML_FILE += "uploaded_file_" + id + "-" + number + ".xml";
 			// Save the XML content to a file
 			Path filePath = uploadPath.resolve(fileName);
 			Files.write(filePath, xmlContent.getBytes());
-
+			XML_FILE = "src/main/resources/";
 			return ResponseEntity.ok("File uploaded successfully! Filename: " + fileName);
 		} catch (Exception e) {
 			return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage());
 		}
 	}
 
-	@GetMapping("/api/v2/download")
+	@GetMapping("/api/v2/download/{id}/{number}")
 	@ResponseBody
-	public ResponseEntity<byte[]> downloadPdf() throws IOException {
+	public ResponseEntity<byte[]> downloadPdf(@PathVariable int id, @PathVariable String number) throws IOException {
+
+		String filePdfName = "Generated_IDS_" + id + "-" + number + ".pdf";
+		XML_FILE += "uploaded_file_" + id + "-" + number + ".xml";
+		RESULT += filePdfName;
 		// Generate the PDF
 		manipulatePdf2(RESOURCE, XML_FILE, RESULT);
 
@@ -137,9 +138,10 @@ public class HomeController {
 
 		// Set headers for download
 		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Generated_IDS.pdf");
+		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filePdfName);
 
 		XML_FILE = "src/main/resources/";
+		RESULT = "src/main/resources/";
 
 		return ResponseEntity.ok()
 				.headers(headers)
