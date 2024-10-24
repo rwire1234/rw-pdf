@@ -35,11 +35,11 @@ import org.w3c.dom.NodeList;
 @RestController
 public class HomeController {
 	public static final String RESOURCE = "src/main/resources/IDS_June2024.pdf";
-	public static String RESULT = "src/main/resources/";
+	public static String RESULT = "src/main/resources/pdf-files/";
 	public static final String DESTINATION = "src/main/resources/";
 	public static final String XML_DATA = "src/main/resources/dataToFill.xml";
-	private static final String UPLOAD_DIR = "src/main/resources/";
-	public static String XML_FILE = "src/main/resources/";
+	private static final String UPLOAD_DIR = "src/main/resources/xml-files/";
+	public static String XML_FILE = "src/main/resources/xml-files/";
 
 	/**
 	 * Extract all level-1 subnodes from XFA structure in a XFA PDF.
@@ -116,7 +116,7 @@ public class HomeController {
 			// Save the XML content to a file
 			Path filePath = uploadPath.resolve(fileName);
 			Files.write(filePath, xmlContent.getBytes());
-			XML_FILE = "src/main/resources/";
+			XML_FILE = "src/main/resources/xml-files/";
 			return ResponseEntity.ok("File uploaded successfully! Filename: " + fileName);
 		} catch (Exception e) {
 			return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage());
@@ -140,8 +140,8 @@ public class HomeController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filePdfName);
 
-		XML_FILE = "src/main/resources/";
-		RESULT = "src/main/resources/";
+		XML_FILE = "src/main/resources/xml-files/";
+		RESULT = "src/main/resources/pdf-files/";
 
 		return ResponseEntity.ok()
 				.headers(headers)
