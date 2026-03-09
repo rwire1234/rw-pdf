@@ -36,7 +36,7 @@ import org.w3c.dom.Node;
 @Service
 public class PdfService {
 
-	private static final String TEMPLATE_PDF = "IDS_June2024.pdf";
+	public static final String TEMPLATE_PDF = "IDS_June2024.pdf";
 	private final Map<String, Path> tempXmlMap = new ConcurrentHashMap<>();
 
 	/**

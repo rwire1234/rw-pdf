@@ -2,15 +2,16 @@ package com.pdf.pdf_generator.controller;
 
 import com.pdf.pdf_generator.service.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,24 +61,33 @@ public class PdfController {
             @ApiResponse(responseCode = "200", description = "PDF file", content = @Content(mediaType = "application/pdf", schema = @Schema(type = "string", format = "binary")))
     })
     @PostMapping("/generate-pdf")
-    public ResponseEntity<?> generateTempPdf(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "XML string used to generate PDF", required = true, content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n  <field1>value1</field1>\n  <field2>value2</field2>\n</root>"))) @RequestBody String xmlContent) {
+    public ResponseEntity<?> generatePdf(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "XML string used to generate PDF", required = true, content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "<root>\n  <field1>value1</field1>\n  <field2>value2</field2>\n</root>"))) @RequestBody String xmlContent) {
+
         Path tempXml = null;
         Path tempPdf = null;
+        Path tempPdfTemplate = null;
+
         try {
-            String xmlFileName = "temp_" + UUID.randomUUID() + ".xml";
-            tempXml = Paths.get(PdfService.UPLOAD_DIR, xmlFileName);
-            Files.write(tempXml, xmlContent.getBytes(), StandardOpenOption.CREATE);
+            tempXml = Files.createTempFile("temp_", ".xml");
+            Files.writeString(tempXml, xmlContent);
 
-            String pdfFileName = "temp_" + UUID.randomUUID() + ".pdf";
-            tempPdf = Paths.get(PdfService.RESULT, pdfFileName);
+            tempPdf = Files.createTempFile("temp_", ".pdf");
 
-            pdfService.manipulatePdf2(PdfService.RESOURCE, tempXml.toString(), tempPdf.toString());
+            InputStream pdfTemplateStream = new ClassPathResource(PdfService.TEMPLATE_PDF).getInputStream();
+            tempPdfTemplate = Files.createTempFile("template_", ".pdf");
+            Files.copy(pdfTemplateStream, tempPdfTemplate, StandardCopyOption.REPLACE_EXISTING);
+
+            pdfService.manipulatePdf2(
+                    tempPdfTemplate.toString(),
+                    tempXml.toString(),
+                    tempPdf.toString());
 
             byte[] pdfBytes = Files.readAllBytes(tempPdf);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + pdfFileName);
+            headers.add(HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; filename=Generated_IDS_" + UUID.randomUUID() + ".pdf");
 
             return ResponseEntity.ok()
                     .headers(headers)
@@ -86,12 +96,15 @@ public class PdfController {
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
+
         } finally {
             try {
                 if (tempXml != null)
                     Files.deleteIfExists(tempXml);
                 if (tempPdf != null)
                     Files.deleteIfExists(tempPdf);
+                if (tempPdfTemplate != null)
+                    Files.deleteIfExists(tempPdfTemplate);
             } catch (IOException ignored) {
             }
         }
