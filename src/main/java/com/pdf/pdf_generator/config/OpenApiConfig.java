@@ -1,4 +1,5 @@
 package com.pdf.pdf_generator.config;
+
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.OpenAPI;
 
@@ -14,7 +15,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("PDF Generator API")
-                        .description("Spring Boot API for generating PDFs from XML")
+                        .description("APIs for generating PDFs from XML")
                         .version("v2.0"));
     }
 }
