@@ -1,5 +1,6 @@
 package com.pdf.pdf_generator.service;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,11 @@ import com.itextpdf.forms.xfa.XfaForm;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.TransformerFactory;
@@ -30,17 +33,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-
-
 @Service
 public class PdfService {
 
-    public static final String RESOURCE = "src/main/resources/IDS_June2024.pdf";
-    public static String RESULT = "src/main/resources/pdf-files/";
-    public static final String UPLOAD_DIR = "src/main/resources/xml-files/";
-    public static String XML_FILE = "src/main/resources/xml-files/";
+	private static final String TEMPLATE_PDF = "IDS_June2024.pdf";
+	private final Map<String, Path> tempXmlMap = new ConcurrentHashMap<>();
 
-    /**
+	/**
 	 * Extract all level-1 subnodes from XFA structure in a XFA PDF.
 	 * 
 	 * @param src      src the path of source PDF file
@@ -94,68 +93,85 @@ public class PdfService {
 		}
 	}
 
-    public ResponseEntity<String> uploadXml(int id, String number, String xmlContent) {
+	public ResponseEntity<?> uploadXml(int id, String number, String xmlContent) {
+		Path tempXml = null;
+		String key = id + "_" + number;
+		try {
+			tempXml = Files.createTempFile("uploaded_" + key + "_", ".xml");
+			Files.writeString(tempXml, xmlContent);
+			tempXmlMap.put(key, tempXml);
 
-        try {
+			return ResponseEntity.ok("File uploaded successfully! Temp file created.");
 
-            Path uploadPath = Paths.get(UPLOAD_DIR);
+		} catch (Exception e) {
+			return ResponseEntity.status(500)
+					.body("Error uploading file: " + e.getMessage());
+		}
+	}
 
-            String fileName = "uploaded_file_" + id + "-" + number + ".xml";
+	public ResponseEntity<?> downloadPdf(int id, String number) throws IOException {
+		String key = id + "_" + number;
+		Path tempXml = tempXmlMap.get(key);
 
-            Path filePath = uploadPath.resolve(fileName);
+		if (tempXml == null || !Files.exists(tempXml)) {
+			return ResponseEntity.status(404).body(null);
+		}
 
-            Files.write(filePath, xmlContent.getBytes());
+		Path tempPdf = null;
+		Path tempTemplatePdf = null;
+		try {
+			tempPdf = Files.createTempFile("generated_" + key + "_", ".pdf");
 
-            return ResponseEntity.ok("File uploaded successfully! Filename: " + fileName);
+			try (InputStream templateStream = new ClassPathResource(TEMPLATE_PDF).getInputStream()) {
+				tempTemplatePdf = Files.createTempFile("template_", ".pdf");
+				Files.copy(templateStream, tempTemplatePdf, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+			}
 
-        } catch (Exception e) {
+			manipulatePdf2(
+					tempTemplatePdf.toAbsolutePath().toString(),
+					tempXml.toAbsolutePath().toString(),
+					tempPdf.toAbsolutePath().toString());
 
-            return ResponseEntity.status(500)
-                    .body("Error uploading file: " + e.getMessage());
-        }
-    }
+			byte[] pdfBytes = Files.readAllBytes(tempPdf);
 
-    public ResponseEntity<byte[]> downloadPdf(int id, String number) throws IOException {
+			HttpHeaders headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_DISPOSITION,
+					"attachment; filename=Generated_IDS_" + id + "-" + number + ".pdf");
 
-        String filePdfName = "Generated_IDS_" + id + "-" + number + ".pdf";
+			return ResponseEntity.ok()
+					.headers(headers)
+					.contentType(MediaType.APPLICATION_PDF)
+					.body(pdfBytes);
 
-        String xmlFile = XML_FILE + "uploaded_file_" + id + "-" + number + ".xml";
+		} finally {
+			if (tempXml != null) {
+				Files.deleteIfExists(tempXml);
+				tempXmlMap.remove(key);
+			}
+			if (tempPdf != null) {
+				Files.deleteIfExists(tempPdf);
+			}
+		}
+	}
 
-        String resultFile = RESULT + filePdfName;
+	public void manipulatePdf2(String src, String xml, String dest) throws IOException {
 
-        manipulatePdf2(RESOURCE, xmlFile, resultFile);
+		PdfReader reader = new PdfReader(src);
 
-        byte[] pdfBytes = Files.readAllBytes(Paths.get(resultFile));
+		PdfDocument pdfDoc = new PdfDocument(
+				reader,
+				new PdfWriter(dest),
+				new StampingProperties().useAppendMode());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=" + filePdfName);
+		PdfAcroForm form = PdfAcroForm.getAcroForm(pdfDoc, true);
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(pdfBytes);
-    }
+		XfaForm xfa = form.getXfaForm();
 
-    public void manipulatePdf2(String src, String xml, String dest) throws IOException {
+		xfa.fillXfaForm(new FileInputStream(xml));
 
-        PdfReader reader = new PdfReader(src);
+		xfa.write(pdfDoc);
 
-        PdfDocument pdfDoc = new PdfDocument(
-                reader,
-                new PdfWriter(dest),
-                new StampingProperties().useAppendMode()
-        );
-
-        PdfAcroForm form = PdfAcroForm.getAcroForm(pdfDoc, true);
-
-        XfaForm xfa = form.getXfaForm();
-
-        xfa.fillXfaForm(new FileInputStream(xml));
-
-        xfa.write(pdfDoc);
-
-        pdfDoc.close();
-    }
+		pdfDoc.close();
+	}
 
 }
