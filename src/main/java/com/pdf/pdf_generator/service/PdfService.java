@@ -143,6 +143,9 @@ public class PdfService {
 					.contentType(MediaType.APPLICATION_PDF)
 					.body(pdfBytes);
 
+		} catch (Exception e) {
+			return ResponseEntity.status(500)
+					.body("Error downloading file: " + e.getMessage());
 		} finally {
 			if (tempXml != null) {
 				Files.deleteIfExists(tempXml);
