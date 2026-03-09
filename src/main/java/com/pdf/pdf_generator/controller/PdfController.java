@@ -60,7 +60,8 @@ public class PdfController {
             @ApiResponse(responseCode = "200", description = "PDF file", content = @Content(mediaType = "application/pdf", schema = @Schema(type = "string", format = "binary")))
     })
     @PostMapping("/generate-pdf")
-    public ResponseEntity<?> generateTempPdf(@RequestBody String xmlContent) {
+    public ResponseEntity<?> generateTempPdf(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "XML string used to generate PDF", required = true, content = @Content(mediaType = "text/plain", schema = @Schema(type = "string", example = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n  <field1>value1</field1>\n  <field2>value2</field2>\n</root>"))) @RequestBody String xmlContent) {
         Path tempXml = null;
         Path tempPdf = null;
         try {
