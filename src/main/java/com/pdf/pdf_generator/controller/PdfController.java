@@ -16,7 +16,7 @@ public class PdfController {
     @Autowired
     private PdfService pdfService;
 
-     @Operation(summary = "Upload XML file", description = "Uploads XML data which will be used to generate the PDF")
+    @Operation(summary = "Upload XML file", description = "Uploads XML data which will be used to generate the PDF")
     @PostMapping("/upload-xml/{id}/{number}")
     public ResponseEntity<String> uploadXml(
             @PathVariable int id,
