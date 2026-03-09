@@ -5,9 +5,9 @@ services:
     build:
       context: .                 
       dockerfile: Dockerfile
-      target: dev
+      target: prod                
     ports:
       - "9000:9000"              
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=prod
     restart: unless-stopped   
